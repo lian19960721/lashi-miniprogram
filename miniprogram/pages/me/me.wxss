@@ -144,3 +144,20 @@
   font-size: 32rpx;
   color: var(--muted);
 }
+
+.history-item--failed {
+  border: 2rpx solid var(--destructive);
+}
+.hi-failed {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: var(--destructive);
+}
+.hi-resave {
+  flex-shrink: 0;
+  padding: 10rpx 18rpx;
+  font-size: 22rpx;
+  color: #fff;
+  background: var(--destructive);
+  border-radius: 999rpx;
+}

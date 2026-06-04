@@ -39,7 +39,7 @@
     <view class="chart-title">历史记录</view>
     <view wx:if="{{!hasRecords}}" class="card empty">还没有记录，去首页开始第一次吧 💩</view>
     <view wx:else class="history-list">
-      <view wx:for="{{records}}" wx:key="_id" class="card history-item">
+      <view wx:for="{{records}}" wx:key="key" class="card history-item {{item.failed ? 'history-item--failed' : ''}}">
         <view class="hi-emoji" style="background: {{item.color}}33;">{{item.emoji}}</view>
         <view class="hi-main">
           <view class="hi-top">
@@ -47,8 +47,21 @@
             <text class="hi-tag" style="background: {{item.color}};">{{item.feelingText}}</text>
           </view>
           <view class="hi-date">{{item.dateText}}</view>
+          <view wx:if="{{item.failed}}" class="hi-failed">未正常保存，请重新保存</view>
         </view>
-        <view class="hi-del" data-id="{{item._id}}" bindtap="onDelete">🗑️</view>
+        <view
+          wx:if="{{item.failed}}"
+          class="hi-resave"
+          data-localid="{{item.localId}}"
+          catchtap="onResave"
+        >重新保存</view>
+        <view
+          class="hi-del"
+          data-id="{{item.id}}"
+          data-localid="{{item.localId}}"
+          data-failed="{{item.failed}}"
+          catchtap="onDelete"
+        >🗑️</view>
       </view>
     </view>
   </view>

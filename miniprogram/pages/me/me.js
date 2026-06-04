@@ -41,30 +41,51 @@ Page({
       .catch(() => {});
   },
 
-  _render(records) {
-    const list = records.map((r) => ({
-      _id: r._id,
+  _render(cloudRecords) {
+    const failed = store.getFailedRecords();
+
+    const toItem = (r, isFailed) => ({
+      key: isFailed ? r._localId : r._id,
+      id: isFailed ? '' : r._id,
+      localId: isFailed ? r._localId : '',
+      failed: isFailed,
       feelingText: r.feeling || '未记录',
       emoji: r.feeling ? poop.FEELING_EMOJI[r.feeling] : '➖',
       color: r.feeling ? poop.FEELING_COLOR[r.feeling] : '#c2b3a0',
       durText: poop.humanDuration(r.duration),
       dateText: poop.formatDateTime(r.endAt),
-    }));
+    });
+
+    // 失败记录是刚刚发生的，放在最上面（最新）
+    const list = failed.map((r) => toItem(r, true)).concat(cloudRecords.map((r) => toItem(r, false)));
+    const all = failed.concat(cloudRecords);
 
     let stats = { total: 0, totalDurText: '—', avgText: '—', maxMinText: '—' };
-    if (records.length) {
-      const durs = records.map((r) => r.duration);
+    if (all.length) {
+      const durs = all.map((r) => r.duration);
       const totalDur = durs.reduce((a, b) => a + b, 0);
-      const avg = Math.round(totalDur / records.length);
+      const avg = Math.round(totalDur / all.length);
       stats = {
-        total: records.length,
+        total: all.length,
         totalDurText: poop.humanDuration(totalDur),
         avgText: poop.humanDuration(avg),
         maxMinText: `${poop.humanDuration(Math.max.apply(null, durs))} / ${poop.humanDuration(Math.min.apply(null, durs))}`,
       };
     }
 
-    this.setData({ records: list, hasRecords: records.length > 0, stats });
+    this.setData({ records: list, hasRecords: list.length > 0, stats });
+  },
+
+  onResave(e) {
+    const localId = e.currentTarget.dataset.localid;
+    store
+      .retryFailed(localId)
+      .then((saved) => {
+        if (!saved) return;
+        this._render(store.getCachedRecords());
+        wx.showToast({ title: '保存成功', icon: 'none' });
+      })
+      .catch(() => wx.showToast({ title: '仍然失败，请稍后再试', icon: 'none' }));
   },
 
   async onChooseAvatar(e) {
@@ -97,7 +118,7 @@ Page({
   },
 
   onDelete(e) {
-    const id = e.currentTarget.dataset.id;
+    const { id, localid, failed } = e.currentTarget.dataset;
     wx.showModal({
       title: '删除这条记录？',
       content: '删除后无法恢复。',
@@ -105,8 +126,13 @@ Page({
       success: async (res) => {
         if (!res.confirm) return;
         try {
-          const list = await store.removeRecord(id);
-          this._render(list);
+          if (failed) {
+            store.removeFailed(localid);
+            this._render(store.getCachedRecords());
+          } else {
+            const list = await store.removeRecord(id);
+            this._render(list);
+          }
         } catch (err) {
           wx.showToast({ title: '删除失败', icon: 'none' });
         }

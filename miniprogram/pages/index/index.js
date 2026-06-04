@@ -146,22 +146,18 @@ Page({
       duration,
       feeling: feeling || null,
     };
-    this.setData({ pickerOpen: false });
-    wx.showLoading({ title: '保存中', mask: true });
+    // 立即收起弹窗并清掉计时态，界面即时响应（不再显示“保存中”loading）
+    wx.removeStorageSync('poop:active');
+    this.setData({ pickerOpen: false, active: null, pendingEnd: null, elapsedText: '00:00' });
     try {
       await store.addRecord(rec);
-      wx.removeStorageSync('poop:active');
-      this.setData({ active: null, pendingEnd: null, elapsedText: '00:00' });
       this._renderStats(store.getCachedRecords());
-      wx.hideLoading();
-      wx.showToast({
-        title: feeling ? `用时 ${poop.humanDuration(duration)}` : `已记录 · ${poop.humanDuration(duration)}`,
-        icon: 'none',
-      });
+      wx.showToast({ title: `保存成功 · 用时 ${poop.humanDuration(duration)}`, icon: 'none' });
     } catch (err) {
-      console.error('[saveRecord] addRecord 失败:', err);
-      wx.hideLoading();
-      wx.showToast({ title: '保存失败', icon: 'none' });
+      // 失败：存到本地 outbox，在「我的」页顶部提示重新保存
+      console.error('[saveRecord] 保存失败，存入本地待重试:', err);
+      store.addFailed(rec);
+      wx.showToast({ title: '保存失败，请在「我的」重新保存', icon: 'none' });
     } finally {
       this._saving = false;
     }

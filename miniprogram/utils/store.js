@@ -74,6 +74,45 @@ async function uploadAvatar(filePath) {
   return res.fileID;
 }
 
+// ---- 保存失败的本地 outbox（待重试）----
+const FAILED = 'poop:failed';
+function getFailedRecords() {
+  return wx.getStorageSync(FAILED) || [];
+}
+function setFailedRecords(list) {
+  wx.setStorageSync(FAILED, list);
+}
+function addFailed(rec) {
+  const item = Object.assign(
+    { _localId: `local_${Date.now()}_${Math.floor(Math.random() * 1000)}` },
+    rec,
+  );
+  setFailedRecords([item].concat(getFailedRecords()));
+  return item;
+}
+function removeFailed(localId) {
+  const list = getFailedRecords().filter((f) => f._localId !== localId);
+  setFailedRecords(list);
+  return list;
+}
+// 重新把某条失败记录写入云端；成功后从 outbox 移除并进入正常缓存
+async function retryFailed(localId) {
+  const failed = getFailedRecords();
+  const item = failed.find((f) => f._localId === localId);
+  if (!item) return null;
+  const rec = {
+    startAt: item.startAt,
+    endAt: item.endAt,
+    duration: item.duration,
+    feeling: item.feeling,
+  };
+  const res = await db().collection(RECORDS).add({ data: rec });
+  setFailedRecords(failed.filter((f) => f._localId !== localId));
+  const saved = Object.assign({ _id: res._id }, rec);
+  setCachedRecords([saved].concat(getCachedRecords()));
+  return saved;
+}
+
 module.exports = {
   getCachedRecords,
   setCachedRecords,
@@ -85,4 +124,8 @@ module.exports = {
   fetchProfile,
   upsertProfile,
   uploadAvatar,
+  getFailedRecords,
+  addFailed,
+  removeFailed,
+  retryFailed,
 };
