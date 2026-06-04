@@ -1,0 +1,31 @@
+{
+  "pages": ["pages/index/index", "pages/me/me"],
+  "window": {
+    "navigationBarTitleText": "拉屎记",
+    "navigationBarBackgroundColor": "#fdf6ec",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#fdf6ec"
+  },
+  "tabBar": {
+    "color": "#9a8c7a",
+    "selectedColor": "#c8862b",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home-active.png"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "text": "我的",
+        "iconPath": "images/me.png",
+        "selectedIconPath": "images/me-active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

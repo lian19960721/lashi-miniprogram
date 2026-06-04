@@ -1,0 +1,25 @@
+page {
+  --bg: #fdf6ec;
+  --card: #ffffff;
+  --foreground: #2b2018;
+  --muted: #9a8c7a;
+  --primary: #c8862b;
+  --destructive: #d8553a;
+  --border: #ece2d4;
+  background: var(--bg);
+  color: var(--foreground);
+  font-family: -apple-system, "PingFang SC", sans-serif;
+}
+
+.container {
+  max-width: 750rpx;
+  margin: 0 auto;
+  padding-bottom: 160rpx;
+  box-sizing: border-box;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+}
