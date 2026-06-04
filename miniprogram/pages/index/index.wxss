@@ -100,47 +100,59 @@
   z-index: 100;
 }
 .picker {
-  width: 560rpx;
+  position: relative;
+  width: 480rpx;
   background: var(--card);
-  border-radius: 40rpx;
-  padding: 48rpx 40rpx;
+  border-radius: 32rpx;
+  padding: 36rpx 28rpx 28rpx;
+}
+.picker-close {
+  position: absolute;
+  top: 8rpx;
+  right: 16rpx;
+  width: 56rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  text-align: center;
+  font-size: 44rpx;
+  color: var(--muted);
 }
 .picker-title {
   text-align: center;
-  font-size: 38rpx;
+  font-size: 32rpx;
   font-weight: 600;
 }
 .picker-sub {
   text-align: center;
-  margin-top: 8rpx;
-  font-size: 26rpx;
+  margin-top: 6rpx;
+  font-size: 22rpx;
   color: var(--muted);
 }
 .picker-grid {
-  margin-top: 32rpx;
+  margin-top: 22rpx;
   display: flex;
   flex-wrap: wrap;
-  gap: 24rpx;
+  gap: 16rpx;
 }
 .picker-item {
-  width: calc(50% - 12rpx);
+  width: calc(50% - 8rpx);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8rpx;
-  padding: 32rpx 0;
+  gap: 4rpx;
+  padding: 20rpx 0;
   border: 2rpx solid var(--border);
-  border-radius: 28rpx;
+  border-radius: 22rpx;
   background: var(--card);
 }
 .picker-item--hover {
   background: #f6ede0;
 }
 .picker-emoji {
-  font-size: 56rpx;
+  font-size: 44rpx;
 }
 .picker-name {
-  font-size: 28rpx;
+  font-size: 24rpx;
   font-weight: 500;
 }

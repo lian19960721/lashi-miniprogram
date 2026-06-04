@@ -60,7 +60,7 @@
         <view class="hi-main">
           <view class="hi-top">
             <text class="hi-dur">{{item.durText}}</text>
-            <text class="hi-tag" style="background: {{item.color}};">{{item.feeling}}</text>
+            <text class="hi-tag" style="background: {{item.color}};">{{item.feelingText}}</text>
           </view>
           <view class="hi-date">{{item.dateText}}</view>
         </view>

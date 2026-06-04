@@ -51,9 +51,9 @@ Page({
   _render(records) {
     const list = records.map((r) => ({
       _id: r._id,
-      feeling: r.feeling,
-      emoji: poop.FEELING_EMOJI[r.feeling],
-      color: poop.FEELING_COLOR[r.feeling],
+      feelingText: r.feeling || '未记录',
+      emoji: r.feeling ? poop.FEELING_EMOJI[r.feeling] : '➖',
+      color: r.feeling ? poop.FEELING_COLOR[r.feeling] : '#c2b3a0',
       durText: poop.humanDuration(r.duration),
       dateText: poop.formatDateTime(r.endAt),
     }));

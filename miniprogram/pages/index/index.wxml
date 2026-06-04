@@ -29,8 +29,9 @@
 
   <view wx:if="{{pickerOpen}}" class="mask" bindtap="closePicker">
     <view class="picker" catchtap="noop">
+      <view class="picker-close" catchtap="closePicker">×</view>
       <view class="picker-title">这次感觉如何？</view>
-      <view class="picker-sub">用时 {{pendingDurText}}</view>
+      <view class="picker-sub">用时 {{pendingDurText}} · {{countdown}} 秒后自动记录</view>
       <view class="picker-grid">
         <view
           wx:for="{{feelingItems}}"
