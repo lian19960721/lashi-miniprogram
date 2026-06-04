@@ -17,6 +17,10 @@ Page({
 
   _pieChart: null,
   _barChart: null,
+  _pieInitting: false,
+  _barInitting: false,
+  _pieOption: null,
+  _barOption: null,
 
   onLoad() {
     const profile = store.getCachedProfile();
@@ -26,7 +30,6 @@ Page({
         nickname: profile.nickname || DEFAULT_NICKNAME,
       });
     }
-    this._render(store.getCachedRecords());
   },
 
   onShow() {
@@ -77,45 +80,68 @@ Page({
   },
 
   _renderCharts(records) {
-    if (!records.length) return;
-    this._initPie(records);
-    this._initBar(records);
+    if (!records.length) {
+      // 没有记录时 ec-canvas 已从视图移除，清空实例，下次有数据时重新初始化
+      this._pieChart = null;
+      this._barChart = null;
+      return;
+    }
+    this._renderChart('pie', '#pie-chart', this._buildPieOption(records));
+    this._renderChart('bar', '#bar-chart', this._buildBarOption(records));
   },
 
-  _initPie(records) {
-    const counts = {};
-    poop.FEELINGS.forEach((f) => (counts[f] = 0));
-    records.forEach((r) => (counts[r.feeling] = (counts[r.feeling] || 0) + 1));
-    const data = poop.FEELINGS.filter((f) => counts[f] > 0).map((f) => ({
-      name: f,
-      value: counts[f],
-      itemStyle: { color: poop.FEELING_COLOR[f] },
-    }));
+  // 关键：图表只初始化一次，之后数据变化用 setOption 更新，避免反复 init 造成闪烁/不稳定
+  _renderChart(key, selector, option) {
+    const instKey = key === 'pie' ? '_pieChart' : '_barChart';
+    const initKey = key === 'pie' ? '_pieInitting' : '_barInitting';
+    const optKey = key === 'pie' ? '_pieOption' : '_barOption';
+    this[optKey] = option; // 始终记住最新 option
 
-    const comp = this.selectComponent('#pie-chart');
+    if (this[instKey]) {
+      this[instKey].setOption(option, true);
+      return;
+    }
+    if (this[initKey]) return; // 初始化进行中，跳过重复 init
+    const comp = this.selectComponent(selector);
     if (!comp) return;
+    this[initKey] = true;
     comp.init((canvas, width, height, dpr) => {
       const chart = echarts.init(canvas, null, { width, height, devicePixelRatio: dpr });
-      chart.setOption({
-        tooltip: { trigger: 'item' },
-        legend: { bottom: 0, textStyle: { fontSize: 10 } },
-        series: [
-          {
-            type: 'pie',
-            radius: ['40%', '68%'],
-            center: ['50%', '42%'],
-            label: { show: false },
-            data: data,
-          },
-        ],
-      });
-      this._pieChart = chart;
+      chart.setOption(this[optKey]); // 用最新 option
+      this[instKey] = chart;
+      this[initKey] = false;
       canvas.setChart(chart);
       return chart;
     });
   },
 
-  _initBar(records) {
+  _buildPieOption(records) {
+    const counts = {};
+    poop.FEELINGS.forEach((f) => (counts[f] = 0));
+    records.forEach((r) => {
+      if (r.feeling && counts[r.feeling] != null) counts[r.feeling]++;
+    });
+    const data = poop.FEELINGS.filter((f) => counts[f] > 0).map((f) => ({
+      name: f,
+      value: counts[f],
+      itemStyle: { color: poop.FEELING_COLOR[f] },
+    }));
+    return {
+      tooltip: { trigger: 'item' },
+      legend: { bottom: 0, textStyle: { fontSize: 10 } },
+      series: [
+        {
+          type: 'pie',
+          radius: ['40%', '68%'],
+          center: ['50%', '42%'],
+          label: { show: false },
+          data: data,
+        },
+      ],
+    };
+  },
+
+  _buildBarOption(records) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const days = [];
@@ -130,28 +156,26 @@ Page({
       const found = days.find((x) => x.ts === d.getTime());
       if (found) found.count++;
     });
-
-    const comp = this.selectComponent('#bar-chart');
-    if (!comp) return;
-    comp.init((canvas, width, height, dpr) => {
-      const chart = echarts.init(canvas, null, { width, height, devicePixelRatio: dpr });
-      chart.setOption({
-        grid: { top: 16, right: 8, bottom: 24, left: 24 },
-        tooltip: { trigger: 'axis' },
-        xAxis: {
-          type: 'category',
-          data: days.map((d) => d.label),
-          axisTick: { show: false },
-          axisLine: { show: false },
-          axisLabel: { fontSize: 9, interval: 1, color: '#9a8c7a' },
-        },
-        yAxis: { type: 'value', minInterval: 1, axisLine: { show: false }, splitLine: { lineStyle: { color: '#ece2d4' } } },
-        series: [{ type: 'bar', data: days.map((d) => d.count), itemStyle: { color: '#c8862b', borderRadius: [6, 6, 0, 0] } }],
-      });
-      this._barChart = chart;
-      canvas.setChart(chart);
-      return chart;
-    });
+    return {
+      grid: { top: 16, right: 8, bottom: 24, left: 24 },
+      tooltip: { trigger: 'axis' },
+      xAxis: {
+        type: 'category',
+        data: days.map((d) => d.label),
+        axisTick: { show: false },
+        axisLine: { show: false },
+        axisLabel: { fontSize: 9, interval: 1, color: '#9a8c7a' },
+      },
+      yAxis: {
+        type: 'value',
+        minInterval: 1,
+        axisLine: { show: false },
+        splitLine: { lineStyle: { color: '#ece2d4' } },
+      },
+      series: [
+        { type: 'bar', data: days.map((d) => d.count), itemStyle: { color: '#c8862b', borderRadius: [6, 6, 0, 0] } },
+      ],
+    };
   },
 
   async onChooseAvatar(e) {
