@@ -1,0 +1,71 @@
+<view class="container me">
+  <view class="profile">
+    <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+      <image wx:if="{{avatarUrl}}" class="avatar-img" src="{{avatarUrl}}" mode="aspectFill"></image>
+      <view wx:else class="avatar-placeholder">💩</view>
+      <view class="avatar-cam">📷</view>
+    </button>
+    <input
+      class="nickname-input"
+      type="nickname"
+      value="{{nickname}}"
+      placeholder="拉屎大师"
+      maxlength="16"
+      bindinput="onNicknameInput"
+      bindblur="onNicknameBlur"
+    />
+  </view>
+
+  <view class="stat-grid">
+    <view class="card stat-block">
+      <view class="stat-label">总次数</view>
+      <view class="stat-value">{{stats.total}} <text class="unit">次</text></view>
+    </view>
+    <view class="card stat-block">
+      <view class="stat-label">总时长</view>
+      <view class="stat-value">{{stats.totalDurText}}</view>
+    </view>
+    <view class="card stat-block">
+      <view class="stat-label">平均时长</view>
+      <view class="stat-value">{{stats.avgText}}</view>
+    </view>
+    <view class="card stat-block">
+      <view class="stat-label">最长 / 最短</view>
+      <view class="stat-value small">{{stats.maxMinText}}</view>
+    </view>
+  </view>
+
+  <block wx:if="{{hasRecords}}">
+    <view class="card chart-card">
+      <view class="chart-title">感受分布</view>
+      <view class="chart-box">
+        <ec-canvas id="pie-chart" canvas-id="pie-canvas" ec="{{ pieEc }}"></ec-canvas>
+      </view>
+    </view>
+
+    <view class="card chart-card">
+      <view class="chart-title">近 14 天频率</view>
+      <view class="chart-box">
+        <ec-canvas id="bar-chart" canvas-id="bar-canvas" ec="{{ barEc }}"></ec-canvas>
+      </view>
+    </view>
+  </block>
+
+  <view class="history">
+    <view class="chart-title">历史记录</view>
+    <view wx:if="{{!hasRecords}}" class="card empty">还没有记录，去首页开始第一次吧 💩</view>
+    <view wx:else class="history-list">
+      <view wx:for="{{records}}" wx:key="_id" class="card history-item">
+        <view class="hi-emoji" style="background: {{item.color}}33;">{{item.emoji}}</view>
+        <view class="hi-main">
+          <view class="hi-top">
+            <text class="hi-dur">{{item.durText}}</text>
+            <text class="hi-tag" style="background: {{item.color}};">{{item.feeling}}</text>
+          </view>
+          <view class="hi-date">{{item.dateText}}</view>
+        </view>
+        <view class="hi-del" data-id="{{item._id}}" bindtap="onDelete">🗑️</view>
+      </view>
+    </view>
+  </view>
+</view>
