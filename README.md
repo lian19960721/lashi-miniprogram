@@ -18,8 +18,7 @@
 miniprogram/
 ├── app.{js,json,wxss}              全局配置 + 云初始化 + 样式变量
 ├── pages/index/                    首页：计时打卡 + 感受面板
-├── pages/me/                       我的：统计 + 饼图/柱状图 + 头像昵称 + 历史
-├── components/ec-canvas/           ECharts 图表组件（含 echarts.js 构建包）
+├── pages/me/                       我的：统计卡 + 头像昵称 + 历史记录
 └── utils/
     ├── poop.js                     数据常量 + 工具函数（有单测）
     └── store.js                    云数据库 + 本地缓存数据层
