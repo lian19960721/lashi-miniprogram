@@ -1,0 +1,49 @@
+<view class="container index">
+  <view class="header">
+    <view class="title">💩 拉屎记</view>
+    <view class="subtitle">认真对待每一次释放</view>
+  </view>
+
+  <view class="stats">
+    <view class="card stat">
+      <view class="stat-label">今日次数</view>
+      <view class="stat-value">{{todayCount}} 次</view>
+    </view>
+    <view class="card stat">
+      <view class="stat-label">上次距今</view>
+      <view class="stat-value">{{lastAgo}}</view>
+    </view>
+  </view>
+
+  <view class="main">
+    <view class="big-btn {{active ? 'big-btn--active' : ''}}" bindtap="onMainTap" hover-class="big-btn--hover">
+      <view class="big-emoji">{{active ? '⏱️' : '💩'}}</view>
+      <block wx:if="{{active}}">
+        <view class="big-timer">{{elapsedText}}</view>
+        <view class="big-hint">点击结束拉屎</view>
+      </block>
+      <view wx:else class="big-label">开始拉屎</view>
+    </view>
+    <view wx:if="{{active}}" class="start-time">开始于 {{startTimeText}}</view>
+  </view>
+
+  <view wx:if="{{pickerOpen}}" class="mask" bindtap="closePicker">
+    <view class="picker" catchtap="noop">
+      <view class="picker-title">这次感觉如何？</view>
+      <view class="picker-sub">用时 {{pendingDurText}}</view>
+      <view class="picker-grid">
+        <view
+          wx:for="{{feelingItems}}"
+          wx:key="name"
+          class="picker-item"
+          data-feeling="{{item.name}}"
+          bindtap="onPickFeeling"
+          hover-class="picker-item--hover"
+        >
+          <view class="picker-emoji">{{item.emoji}}</view>
+          <view class="picker-name">{{item.name}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
