@@ -71,8 +71,9 @@ Page({
       };
     }
 
-    this.setData({ records: list, hasRecords: records.length > 0, stats });
-    this._renderCharts(records);
+    this.setData({ records: list, hasRecords: records.length > 0, stats }, () => {
+      this._renderCharts(records);
+    });
   },
 
   _renderCharts(records) {
@@ -91,7 +92,9 @@ Page({
       itemStyle: { color: poop.FEELING_COLOR[f] },
     }));
 
-    this.selectComponent('#pie-chart').init((canvas, width, height, dpr) => {
+    const comp = this.selectComponent('#pie-chart');
+    if (!comp) return;
+    comp.init((canvas, width, height, dpr) => {
       const chart = echarts.init(canvas, null, { width, height, devicePixelRatio: dpr });
       chart.setOption({
         tooltip: { trigger: 'item' },
@@ -128,7 +131,9 @@ Page({
       if (found) found.count++;
     });
 
-    this.selectComponent('#bar-chart').init((canvas, width, height, dpr) => {
+    const comp = this.selectComponent('#bar-chart');
+    if (!comp) return;
+    comp.init((canvas, width, height, dpr) => {
       const chart = echarts.init(canvas, null, { width, height, devicePixelRatio: dpr });
       chart.setOption({
         grid: { top: 16, right: 8, bottom: 24, left: 24 },
