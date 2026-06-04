@@ -11,15 +11,11 @@ Page({
     stats: { total: 0, totalDurText: '—', avgText: '—', maxMinText: '—' },
     records: [],
     hasRecords: false,
-    pieEc: { lazyLoad: true },
     barEc: { lazyLoad: true },
   },
 
-  _pieChart: null,
   _barChart: null,
-  _pieInitting: false,
   _barInitting: false,
-  _pieOption: null,
   _barOption: null,
 
   onLoad() {
@@ -82,63 +78,31 @@ Page({
   _renderCharts(records) {
     if (!records.length) {
       // 没有记录时 ec-canvas 已从视图移除，清空实例，下次有数据时重新初始化
-      this._pieChart = null;
       this._barChart = null;
       return;
     }
-    this._renderChart('pie', '#pie-chart', this._buildPieOption(records));
-    this._renderChart('bar', '#bar-chart', this._buildBarOption(records));
+    this._renderBar(this._buildBarOption(records));
   },
 
-  // 关键：图表只初始化一次，之后数据变化用 setOption 更新，避免反复 init 造成闪烁/不稳定
-  _renderChart(key, selector, option) {
-    const instKey = key === 'pie' ? '_pieChart' : '_barChart';
-    const initKey = key === 'pie' ? '_pieInitting' : '_barInitting';
-    const optKey = key === 'pie' ? '_pieOption' : '_barOption';
-    this[optKey] = option; // 始终记住最新 option
-
-    if (this[instKey]) {
-      this[instKey].setOption(option, true);
+  // 图表只初始化一次，之后数据变化用 setOption 更新，避免反复 init 造成闪烁/不稳定
+  _renderBar(option) {
+    this._barOption = option; // 始终记住最新 option
+    if (this._barChart) {
+      this._barChart.setOption(option, true);
       return;
     }
-    if (this[initKey]) return; // 初始化进行中，跳过重复 init
-    const comp = this.selectComponent(selector);
+    if (this._barInitting) return; // 初始化进行中，跳过重复 init
+    const comp = this.selectComponent('#bar-chart');
     if (!comp) return;
-    this[initKey] = true;
+    this._barInitting = true;
     comp.init((canvas, width, height, dpr) => {
       const chart = echarts.init(canvas, null, { width, height, devicePixelRatio: dpr });
-      chart.setOption(this[optKey]); // 用最新 option
-      this[instKey] = chart;
-      this[initKey] = false;
+      chart.setOption(this._barOption); // 用最新 option
+      this._barChart = chart;
+      this._barInitting = false;
       canvas.setChart(chart);
       return chart;
     });
-  },
-
-  _buildPieOption(records) {
-    const counts = {};
-    poop.FEELINGS.forEach((f) => (counts[f] = 0));
-    records.forEach((r) => {
-      if (r.feeling && counts[r.feeling] != null) counts[r.feeling]++;
-    });
-    const data = poop.FEELINGS.filter((f) => counts[f] > 0).map((f) => ({
-      name: f,
-      value: counts[f],
-      itemStyle: { color: poop.FEELING_COLOR[f] },
-    }));
-    return {
-      tooltip: { trigger: 'item' },
-      legend: { bottom: 0, textStyle: { fontSize: 10 } },
-      series: [
-        {
-          type: 'pie',
-          radius: ['40%', '68%'],
-          center: ['50%', '42%'],
-          label: { show: false },
-          data: data,
-        },
-      ],
-    };
   },
 
   _buildBarOption(records) {

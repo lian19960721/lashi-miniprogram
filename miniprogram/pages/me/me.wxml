@@ -37,13 +37,6 @@
 
   <block wx:if="{{hasRecords}}">
     <view class="card chart-card">
-      <view class="chart-title">感受分布</view>
-      <view class="chart-box">
-        <ec-canvas id="pie-chart" canvas-id="pie-canvas" ec="{{ pieEc }}"></ec-canvas>
-      </view>
-    </view>
-
-    <view class="card chart-card">
       <view class="chart-title">近 14 天频率</view>
       <view class="chart-box">
         <ec-canvas id="bar-chart" canvas-id="bar-canvas" ec="{{ barEc }}"></ec-canvas>
