@@ -35,15 +35,6 @@
     </view>
   </view>
 
-  <block wx:if="{{hasRecords}}">
-    <view class="card chart-card">
-      <view class="chart-title">近 14 天频率</view>
-      <view class="chart-box">
-        <ec-canvas id="bar-chart" canvas-id="bar-canvas" ec="{{ barEc }}"></ec-canvas>
-      </view>
-    </view>
-  </block>
-
   <view class="history">
     <view class="chart-title">历史记录</view>
     <view wx:if="{{!hasRecords}}" class="card empty">还没有记录，去首页开始第一次吧 💩</view>
