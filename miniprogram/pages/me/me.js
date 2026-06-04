@@ -1,6 +1,6 @@
 const poop = require('../../utils/poop');
 const store = require('../../utils/store');
-const echarts = require('../../lib/echarts');
+const echarts = require('../../components/ec-canvas/echarts');
 
 const DEFAULT_NICKNAME = '拉屎大师';
 
