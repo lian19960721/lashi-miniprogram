@@ -14,11 +14,13 @@
 
 .stats {
   display: flex;
-  gap: 20rpx;
+  justify-content: space-between;
   padding: 48rpx 40rpx 0;
 }
 .stat {
-  flex: 1;
+  flex: none;
+  width: 48.5%;
+  box-sizing: border-box;
   padding: 28rpx;
 }
 .stat-label {
@@ -97,14 +99,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 48rpx;
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  box-sizing: border-box;
   z-index: 100;
 }
 .picker {
   position: relative;
-  width: 480rpx;
+  width: 620rpx;
+  max-width: 100%;
+  max-height: 980rpx;
+  max-height: 78vh;
   background: var(--card);
   border-radius: 32rpx;
   padding: 36rpx 28rpx 28rpx;
+  box-sizing: border-box;
+  overflow-y: auto;
 }
 .picker-close {
   position: absolute;
@@ -132,11 +145,12 @@
   margin-top: 22rpx;
   display: flex;
   flex-wrap: wrap;
-  gap: 16rpx;
+  justify-content: space-between;
 }
 .picker-item {
-  width: calc(50% - 8rpx);
+  width: 48%;
   box-sizing: border-box;
+  margin-bottom: 16rpx;
   display: flex;
   flex-direction: column;
   align-items: center;

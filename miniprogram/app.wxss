@@ -9,13 +9,27 @@ page {
   background: var(--bg);
   color: var(--foreground);
   font-family: -apple-system, "PingFang SC", sans-serif;
+  width: 100%;
+  min-height: 100%;
+}
+
+view,
+button,
+input,
+image,
+text {
+  box-sizing: border-box;
 }
 
 .container {
+  width: 100%;
   max-width: 750rpx;
   margin: 0 auto;
   padding-bottom: 160rpx;
+  padding-bottom: calc(160rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .card {
