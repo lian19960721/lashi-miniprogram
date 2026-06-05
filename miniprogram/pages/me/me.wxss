@@ -8,7 +8,7 @@
   position: relative;
   width: 160rpx;
   height: 160rpx;
-  border-radius: 50%;
+  border-radius: 24rpx;
   padding: 0;
   background: #f0e6d6;
   border: 6rpx solid #fff;
