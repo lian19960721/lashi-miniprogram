@@ -4,6 +4,7 @@
       <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
         <image class="avatar-img" src="{{avatarUrl || '/images/avatar-default.png'}}" mode="aspectFill"></image>
       </button>
+      <view class="avatar-badge"><image class="cam-icon" src="/images/drop.png"></image></view>
       <view class="avatar-cam"><image class="cam-icon" src="/images/cam.png"></image></view>
     </view>
     <input
