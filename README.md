@@ -24,7 +24,6 @@
 
 ## 📸 界面预览
 
-> 截图占位 —— 把你的截图放到 `docs/screenshots/` 下(命名 `home.png`、`me.png`)即可自动显示。
 
 <p align="center">
   <img src="docs/screenshots/home.png" width="260" alt="首页" />
