@@ -1,9 +1,11 @@
 <view class="container me">
   <view class="profile">
-    <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
-      <image class="avatar-img" src="{{avatarUrl || '/images/avatar-default.png'}}" mode="aspectFill"></image>
+    <view class="avatar-wrap">
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image class="avatar-img" src="{{avatarUrl || '/images/avatar-default.png'}}" mode="aspectFill"></image>
+      </button>
       <view class="avatar-cam"><image class="cam-icon" src="/images/cam.png"></image></view>
-    </button>
+    </view>
     <input
       class="nickname-input"
       type="nickname"

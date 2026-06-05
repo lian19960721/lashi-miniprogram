@@ -4,15 +4,19 @@
   align-items: center;
   padding-top: 56rpx;
 }
-.avatar-btn {
+.avatar-wrap {
   position: relative;
-  width: 160rpx;
-  height: 160rpx;
-  border-radius: 24rpx;
+  width: 168rpx;
+  height: 168rpx;
+}
+.avatar-btn {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
   padding: 0;
   background: #f0e6d6;
-  border: 6rpx solid #fff;
-  box-shadow: 0 6rpx 18rpx rgba(0, 0, 0, 0.08);
+  border: 5rpx solid #fff;
+  box-shadow: 0 0 0 2rpx #d8b56a, 0 8rpx 20rpx rgba(0, 0, 0, 0.12);
   overflow: hidden;
   line-height: normal;
 }
@@ -26,8 +30,8 @@
 }
 .avatar-cam {
   position: absolute;
-  right: -6rpx;
-  bottom: -6rpx;
+  right: 4rpx;
+  bottom: 4rpx;
   width: 48rpx;
   height: 48rpx;
   background: var(--primary);
