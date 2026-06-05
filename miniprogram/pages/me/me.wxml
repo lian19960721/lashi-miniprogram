@@ -1,9 +1,8 @@
 <view class="container me">
   <view class="profile">
     <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
-      <image wx:if="{{avatarUrl}}" class="avatar-img" src="{{avatarUrl}}" mode="aspectFill"></image>
-      <view wx:else class="avatar-placeholder">💩</view>
-      <view class="avatar-cam">📷</view>
+      <image class="avatar-img" src="{{avatarUrl || '/images/avatar-default.png'}}" mode="aspectFill"></image>
+      <view class="avatar-cam"><image class="cam-icon" src="/images/cam.png"></image></view>
     </button>
     <input
       class="nickname-input"

@@ -22,27 +22,24 @@
 .avatar-img {
   width: 100%;
   height: 100%;
-}
-.avatar-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 64rpx;
+  display: block;
 }
 .avatar-cam {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 44rpx;
-  height: 44rpx;
+  right: -6rpx;
+  bottom: -6rpx;
+  width: 48rpx;
+  height: 48rpx;
   background: var(--primary);
+  border: 4rpx solid #fff;
   border-radius: 50%;
-  font-size: 22rpx;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.cam-icon {
+  width: 26rpx;
+  height: 26rpx;
 }
 .nickname-input {
   margin-top: 20rpx;
