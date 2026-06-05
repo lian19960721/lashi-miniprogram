@@ -6,8 +6,8 @@
 
   <view class="stats">
     <view class="card stat">
-      <view class="stat-label">今日次数</view>
-      <view class="stat-value">{{todayCount}} 次</view>
+      <view class="stat-label">近一月次数</view>
+      <view class="stat-value">{{monthCount}} 次</view>
     </view>
     <view class="card stat">
       <view class="stat-label">上次距今</view>

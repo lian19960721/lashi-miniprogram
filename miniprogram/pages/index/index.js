@@ -8,7 +8,7 @@ Page({
     active: null,
     elapsedText: '00:00',
     startTimeText: '',
-    todayCount: 0,
+    monthCount: 0,
     lastAgo: '暂无记录',
     pickerOpen: false,
     pendingEnd: null,
@@ -46,12 +46,11 @@ Page({
   },
 
   _renderStats(records) {
-    const start = new Date();
-    start.setHours(0, 0, 0, 0);
-    const todayCount = records.filter((r) => r.endAt >= start.getTime()).length;
+    const monthAgo = Date.now() - 30 * 24 * 3600 * 1000;
+    const monthCount = records.filter((r) => r.endAt >= monthAgo).length;
     const last = records[0];
     this.setData({
-      todayCount,
+      monthCount,
       lastAgo: last ? poop.timeAgo(last.endAt) : '暂无记录',
     });
   },
